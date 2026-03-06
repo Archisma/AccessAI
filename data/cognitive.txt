@@ -1,0 +1,10 @@
+Patterns are things that repeat.
+Example: red, blue, red, blue.
+
+Sequences follow an order.
+Example: 1, 2, 3, 4.
+
+Memory improves with small practice.
+
+Think step by step.
+Do not rush.
