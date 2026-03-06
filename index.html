@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>AccessAI – ADHD Teacher</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; max-width: 900px; }
+    h2 { margin-bottom: 8px; }
+    label { font-weight: bold; }
+    select, textarea, button { font-size: 18px; padding: 10px; width: 100%; margin-top: 8px; }
+    button { cursor: pointer; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; margin-top: 16px; }
+    .big { font-size: 22px; line-height: 1.4; }
+    .muted { color: #555; }
+    .row { display: flex; gap: 12px; }
+    .row > div { flex: 1; }
+    pre { white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+
+<body>
+  <h2>AccessAI – ADHD Teacher</h2>
+  <p class="muted">Pick a subject, ask a question, and get Step 1 only (ADHD-friendly).</p>
+
+  <div class="row">
+    <div>
+      <label for="mode">Subject</label>
+      <select id="mode">
+        <option value="math">Math</option>
+        <option value="english">English</option>
+        <option value="cognitive">Cognitive Skills</option>
+        <option value="gk">General Knowledge</option>
+      </select>
+    </div>
+    <div>
+      <label for="action">Student Option</label>
+      <select id="action">
+        <option value="normal">Start (Step 1)</option>
+        <option value="next_step">Next step</option>
+        <option value="hint">Give me a hint</option>
+        <option value="full_steps">Show all steps</option>
+        <option value="practice">Give me a practice question</option>
+        <option value="simpler">Make it simpler</option>
+      </select>
+    </div>
+  </div>
+
+  <label for="question">Question / Task</label>
+  <textarea id="question" rows="5" placeholder="Example: Solve 24 ÷ 6 OR simplify this paragraph..."></textarea>
+
+  <button onclick="ask()">Ask AccessAI</button>
+
+  <div class="card" id="resultCard" style="display:none;">
+    <div class="big"><b id="title"></b></div>
+    <p class="big" id="summary"></p>
+    <p class="big"><b>Step 1:</b> <span id="step1"></span></p>
+    <p class="big muted" id="example"></p>
+
+    <div class="card">
+      <div class="big"><b>Quick Check:</b> <span id="checkQ"></span></div>
+      <ol class="big" id="choices"></ol>
+      <p class="muted" id="checkHint"></p>
+    </div>
+
+    <details>
+      <summary class="muted">Show raw JSON (debug)</summary>
+      <pre id="raw"></pre>
+    </details>
+  </div>
+
+  <script>
+    let lastQuestion = "";
+
+    async function ask() {
+      const mode = document.getElementById("mode").value;
+      const action = document.getElementById("action").value;
+      const q = document.getElementById("question").value.trim();
+
+      if (!q) {
+        alert("Please type a question.");
+        return;
+      }
+
+      // Keep memory of last question for actions like next_step/hint
+      if (action === "normal") lastQuestion = q;
+
+      // Convert dropdown action into a prompt hint for the agent
+      let finalQuestion = q;
+      if (action !== "normal") {
+        finalQuestion = `User selected: ${action}. Continue based on the previous context. Student request: ${q}`;
+        if (lastQuestion) {
+          finalQuestion = `Previous question: ${lastQuestion}\n` + finalQuestion;
+        }
+      }
+
+      const payload = { mode: mode, question: finalQuestion };
+
+      const res = await fetch("http://127.0.0.1:8000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      // Render
+      document.getElementById("resultCard").style.display = "block";
+      document.getElementById("raw").innerText = JSON.stringify(data, null, 2);
+
+      if (data.need_clarification) {
+        document.getElementById("title").innerText = "One quick question first";
+        document.getElementById("summary").innerText = data.clarifying_question || "Can you clarify?";
+        document.getElementById("step1").innerText = "";
+        document.getElementById("example").innerText = "";
+        document.getElementById("checkQ").innerText = "";
+        document.getElementById("choices").innerHTML = "";
+        document.getElementById("checkHint").innerText = "";
+        return;
+      }
+
+      document.getElementById("title").innerText = data.title || "AccessAI Help";
+      document.getElementById("summary").innerText = data.student_friendly_summary || "";
+      document.getElementById("step1").innerText = (data.step_1 && data.step_1.instruction) ? data.step_1.instruction : "";
+      document.getElementById("example").innerText = (data.step_1 && data.step_1.example) ? ("Example: " + data.step_1.example) : "";
+
+      // Quick check
+      const check = data.check_understanding || {};
+      document.getElementById("checkQ").innerText = check.question || "";
+      const choicesEl = document.getElementById("choices");
+      choicesEl.innerHTML = "";
+      (check.choices || []).forEach((c) => {
+        const li = document.createElement("li");
+        li.innerText = c;
+        choicesEl.appendChild(li);
+      });
+      document.getElementById("checkHint").innerText = check.explanation_if_wrong ? ("Hint: " + check.explanation_if_wrong) : "";
+    }
+  </script>
+</body>
+</html>
