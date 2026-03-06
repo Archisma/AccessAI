@@ -1,71 +1,64 @@
-AccessAI – ADHD Friendly AI Teacher
+# AccessAI – ADHD Friendly AI Teacher
 
-AccessAI is an AI-powered learning assistant designed to help students with ADHD learn in a calm, structured, step-by-step way.
+AccessAI is an AI-powered learning assistant designed to help **students with ADHD learn in a calm, structured, step-by-step way**.
 
-The system combines Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), and structured prompting to provide explanations that avoid cognitive overload and support focused learning.
+The system combines **Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), and structured prompting** to generate explanations that avoid cognitive overload and support focused learning.
 
-Instead of long explanations, AccessAI delivers simple instructions, small steps, and encouragement, making learning easier to follow.
+Instead of long explanations, AccessAI delivers **simple instructions, small steps, and encouragement**, making learning easier to follow.
 
-Problem
+---
 
-Traditional AI tutors often produce long and complex explanations, which can overwhelm students with ADHD or attention difficulties.
+## Problem
+
+Many AI tutors produce **long and complex explanations**, which can overwhelm students with ADHD.
 
 Students with ADHD benefit from:
 
-Short instructions
+- Short instructions
+- Step-by-step guidance
+- Clear structure
+- Encouraging feedback
 
-One step at a time guidance
+AccessAI addresses this by forcing the AI to produce **structured ADHD-friendly responses**.
 
-Clear structure
+---
 
-Encouraging feedback
+## Features
 
-AccessAI addresses this by forcing the AI to produce structured responses designed for ADHD-friendly learning.
-
-Features
-ADHD-Friendly Teaching
-
+### ADHD-Friendly Teaching Style
 The AI responses follow strict rules:
 
-Simple words
+- Simple language
+- Short sentences
+- One step at a time
+- Calm and supportive tone
 
-Short sentences
+### Step-by-Step Learning
+Each response contains:
 
-One step at a time
+- Short explanation
+- Guided steps
+- Final answer
+- Encouragement
+- Quick understanding check
 
-Calm and supportive tone
-
-Step-by-Step Learning
-
-Each answer includes:
-
-Short explanation
-
-Guided steps
-
-Final answer
-
-Encouragement
-
-Quick understanding check
-
-Multiple Subjects
+### Multiple Subjects
 
 The assistant currently supports:
 
-Math
+- Math
+- English
+- Cognitive Skills
+- General Knowledge
 
-English
+### Retrieval-Augmented Generation (RAG)
 
-Cognitive Skills
+AccessAI retrieves relevant learning material from a **vector database** before generating responses, improving accuracy and context.
 
-General Knowledge
+---
 
-Retrieval-Augmented Generation (RAG)
+## Architecture
 
-The system retrieves relevant learning material from a vector database before generating answers, improving accuracy and context.
-
-Architecture
 Frontend (HTML Interface)
         |
         v
@@ -75,41 +68,40 @@ FastAPI Backend
 AI Teacher Module
         |
         v
-Vector Database (Chroma)
+Vector Database (ChromaDB)
         |
         v
 Subject Knowledge Files
-Tech Stack
 
-Backend
+---
 
-Python
+## Tech Stack
 
-FastAPI
+### Backend
+- Python
+- FastAPI
 
-AI / ML
+### AI / ML
+- LangChain
+- ChromaDB
+- HuggingFace Embeddings
+- Local LLM (Phi-3 Mini)
 
-LangChain
+### Frontend
+- HTML
+- JavaScript
 
-ChromaDB
+---
 
-HuggingFace Embeddings
+## Project Structure
 
-Local LLM (Phi-3 Mini)
-
-Frontend
-
-HTML
-
-JavaScript
-
-Project Structure
+```
 AccessAI
 │
-├── main.py                # FastAPI server
-├── ai_teacher.py          # ADHD-friendly AI logic
-├── prompts.py             # Structured prompt rules
-├── vector_store.py        # RAG vector database setup
+├── main.py
+├── ai_teacher.py
+├── prompts.py
+├── vector_store.py
 │
 ├── data
 │   ├── math.txt
@@ -117,39 +109,52 @@ AccessAI
 │   ├── cognitive.txt
 │   └── gk.txt
 │
-├── index.html             # Frontend interface
+├── index.html
 ├── requirements.txt
 └── README.md
-Installation
+```
 
-Clone the repository
+---
 
+## Installation
+
+### 1. Clone the repository
+
+```
 git clone https://github.com/yourusername/accessai-adhd-teacher.git
 cd accessai-adhd-teacher
+```
 
-Install dependencies
+### 2. Install dependencies
 
+```
 pip install -r requirements.txt
+```
 
-Run the backend server
+### 3. Run the backend server
 
+```
 uvicorn main:app --reload
+```
 
-Open the application in your browser.
+---
 
-Example API Request
+## Example API Request
 
-POST request to /ask
+POST `/ask`
 
 Request
 
+```
 {
   "mode": "math",
   "question": "What is 24 divided by 6?"
 }
+```
 
 Example Response
 
+```
 {
   "title": "Division",
   "student_summary": "We divide numbers to see how many equal groups we can make.",
@@ -161,32 +166,33 @@ Example Response
   "final_answer": "4",
   "encouragement": "Great work!"
 }
-Hackathon Project
+```
 
-This project was developed during an AI Hackathon to explore how generative AI can improve inclusive education and accessibility for neurodivergent learners.
+---
 
-Future Improvements
+## Hackathon Project
 
-Voice interaction for students
+This project was built during an **AI Hackathon** to explore how generative AI can support **inclusive education and neurodivergent learners**.
 
-Adaptive learning difficulty
+---
 
-Learning progress tracking
+## Future Improvements
 
-Mobile-friendly interface
+- Voice interaction for students
+- Adaptive learning difficulty
+- Learning progress tracking
+- Mobile-friendly interface
+- Multi-language support
 
-Multi-language support
+---
 
-Author
+## Author
 
-Archisma Ghosal
+**Archisma Ghosal**
 
-AI Engineer focused on:
+AI Engineer working on:
 
-Generative AI
-
-Retrieval-Augmented Generation (RAG)
-
-Agentic AI systems
-
-Production AI applications
+- Generative AI  
+- Retrieval-Augmented Generation (RAG)  
+- Agentic AI systems  
+- Production AI applications
